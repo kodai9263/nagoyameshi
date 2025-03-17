@@ -2,7 +2,10 @@ package com.example.nagoyameshi.service;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,7 +37,7 @@ public class UserService {
 		user.setFurigana(signupForm.getFurigana());
 		user.setPostalCode(signupForm.getPostalCode());
 		user.setAddress(signupForm.getAddress());
-		user.setPhoneNmber(signupForm.getPhoneNumber());
+		user.setPhoneNumber(signupForm.getPhoneNumber());
 		if (!signupForm.getBirthday().isEmpty()) { // 誕生日と職業は空かチェック
 			user.setBirthday(LocalDate.parse(signupForm.getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd")));
 		} else {
@@ -69,5 +72,20 @@ public class UserService {
 	public void enabledUser(User user) {
 		user.setEnabled(true);
 		userRepository.save(user);
+	}
+	
+	// 全てのユーザーをページングされた状態で取得する
+	public Page<User> findAllUser(Pageable pageable) {
+		return userRepository.findAll(pageable);
+	}
+	
+	// 指定されたキーワードを指名またはフリガナに含むユーザーを、ページングされた状態で取得する
+	public Page<User> findUserByNameLikeOrFuriganaLike(String nameKeyword, String furiganaKeyword, Pageable pageable) {
+		return userRepository.findByNameLikeOrFuriganaLike("%" + nameKeyword + "%", "%" + furiganaKeyword + "%", pageable);
+	}
+	
+	// 指定したIDを持つユーザーを取得する
+	public Optional<User> findUserId(Integer id) {
+		return userRepository.findById(id);
 	}
 }
