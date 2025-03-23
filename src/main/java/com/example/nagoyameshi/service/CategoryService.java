@@ -1,5 +1,6 @@
 package com.example.nagoyameshi.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -20,6 +21,10 @@ public class CategoryService {
 		this.categoryRepository = categoryRepository;
 	}
 	
+	// すべてのカテゴリをリスト形式で取得する
+	public List<Category> findAllCategories() {
+		return categoryRepository.findAll();
+	}
 	// すべてのカテゴリをページングされた状態で取得する。
 	public Page<Category> findAllCategories(Pageable pageable) {
 		return categoryRepository.findAll(pageable);
@@ -32,6 +37,9 @@ public class CategoryService {
 	
 	// 指定したidを持つカテゴリを取得する。
 	public Optional<Category> findCategoryById(Integer id) {
+		if (id == null) {
+			return Optional.empty();
+		}
 		return categoryRepository.findById(id);
 	}
 	
