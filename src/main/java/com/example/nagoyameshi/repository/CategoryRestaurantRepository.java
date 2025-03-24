@@ -14,6 +14,6 @@ import com.example.nagoyameshi.entity.Restaurant;
 public interface CategoryRestaurantRepository extends JpaRepository<CategoryRestaurant, Integer>{
 	@Query("SELECT cr.category.id FROM CategoryRestaurant cr WHERE cr.restaurant = :restaurant ORDER BY cr.id ASC")
 	public List<Integer> findCategoryIdsByRestaurantOrderByIdAsc(@Param("restaurant") Restaurant restaurant);
-	public Optional<CategoryRestaurant> findByRestaurantAndCategory(Restaurant restaurant, Category category);
+	public Optional<CategoryRestaurant> findByCategoryAndRestaurant(Category category, Restaurant restaurant);
 	public List<CategoryRestaurant> findByRestaurantOrderByIdAsc(Restaurant restaurant);
 }

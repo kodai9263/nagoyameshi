@@ -30,7 +30,7 @@ public class CategoryRestaurantService {
 		// カテゴリIDのリストをループして処理を行う
 		for (Integer categoryId : categoryIds) {
 			// カテゴリIDがnullでない場合の処理
-			if (categoryIds != null) {
+			if (categoryId != null) {
 				// カテゴリIDに対応するCategoryエンティティをデータベースから取得
 				Optional<Category> optionalCategory = categoryService.findCategoryById(categoryId);
 				// optionalCategoryが値を持っているかを確認 データベースに登録されているか
@@ -38,17 +38,17 @@ public class CategoryRestaurantService {
 					// カテゴリが存在する場合、そのカテゴリを取得
 					Category category = optionalCategory.get();
 					// 店舗とカテゴリの組み合わせがすでに存在するか確認
-					Optional<CategoryRestaurant> existingCategoryRestaurant = categoryRestaurantRepository.findByRestaurantAndCategory(restaurant, category);
+					Optional<CategoryRestaurant> existingCategoryRestaurant = categoryRestaurantRepository.findByCategoryAndRestaurant(category, restaurant);
 					// 存在しない場合、新しくCategoryRestaurantエンティティを作成して保存
 					if (existingCategoryRestaurant.isEmpty()) {
 						CategoryRestaurant categoryRestaurant = new CategoryRestaurant();
-						categoryRestaurant.setRestaurant(restaurant);
 						categoryRestaurant.setCategory(category);
+						categoryRestaurant.setRestaurant(restaurant);
 						categoryRestaurantRepository.save(categoryRestaurant);
 					}
-				}
-			}
-		}
+				}		
+			}			
+		}				
 	}
 	
 	@Transactional
@@ -58,39 +58,38 @@ public class CategoryRestaurantService {
 
 		// フォームから送信されたカテゴリIDのリストがnullの場合、すべての紐づけを解除
 		if (categoryIds == null) {
-			for (CategoryRestaurant categoryRestaurant : existingCategoryRestaurants) {
-				categoryRestaurantRepository.delete(categoryRestaurant);
+			for (CategoryRestaurant categoryrestaurant : existingCategoryRestaurants) {
+				categoryRestaurantRepository.delete(categoryrestaurant);
 			}
 		} else {
 			// 既存の紐づけがフォームから送信されたカテゴリIDのリストに含まれていない場合、その紐づけを解除
-			for (CategoryRestaurant categoryRestaurant : existingCategoryRestaurants) {
-				if (!categoryIds.contains(categoryRestaurant.getCategory().getId())) {
-					categoryRestaurantRepository.delete(categoryRestaurant);
+			for (CategoryRestaurant categoryrestaurant : existingCategoryRestaurants) {
+				if (!categoryIds.contains(categoryrestaurant.getCategory().getId())) {
+					categoryRestaurantRepository.delete(categoryrestaurant);
 				}
 			}
-
-			// フォームから送信されたカテゴリIDが既存の紐づけに存在しない場合、新しく紐づけを行う
-			for (Integer categoryId : categoryIds) {
-				// カテゴリIDがnullでない場合の処理
-				if (categoryId != null) {
-					// カテゴリIDに対応するCategoryエンティティをデータベースから取得
-					Optional<Category> optionalCategory = categoryService.findCategoryById(categoryId);
-					// optionalCategoryが値を持っているかを確認 データベースに登録されているか
-					if (optionalCategory.isPresent()) {
-						// カテゴリが存在する場合、そのカテゴリを取得
-						Category category = optionalCategory.get();
-						// 店舗とカテゴリの組み合わせがすでに存在するか確認
-						Optional<CategoryRestaurant> existingCategoryRestaurant = categoryRestaurantRepository.findByRestaurantAndCategory(restaurant, category);
-						// 存在しない場合、新しくCategoryRestaurantエンティティを作成して保存
-						if (existingCategoryRestaurant.isEmpty()) {
-							CategoryRestaurant categoryRestaurant = new CategoryRestaurant();
-							categoryRestaurant.setRestaurant(restaurant);
-							categoryRestaurant.setCategory(category);
-							categoryRestaurantRepository.save(categoryRestaurant);
-						}
+		}		
+		// フォームから送信されたカテゴリIDが既存の紐づけに存在しない場合、新しく紐づけを行う
+		for (Integer categoryId : categoryIds) {
+			// カテゴリIDがnullでない場合の処理
+			if (categoryId != null) {
+				// カテゴリIDに対応するCategoryエンティティをデータベースから取得
+				Optional <Category> optionalCategory = categoryService.findCategoryById(categoryId);
+				// optionalCategoryが値を持っているかを確認 データベースに登録されているか
+				if (optionalCategory.isPresent()) {
+					// カテゴリが存在する場合、そのカテゴリを取得
+					Category category = optionalCategory.get();
+					// 店舗とカテゴリの組み合わせがすでに存在するか確認
+					Optional<CategoryRestaurant> existingCategoryRestaurant = categoryRestaurantRepository.findByCategoryAndRestaurant(category, restaurant);
+					// 存在しない場合、新しくCategoryRestaurantエンティティを作成して保存
+					if (existingCategoryRestaurant.isEmpty()) {
+						CategoryRestaurant categpryRestaurant = new CategoryRestaurant();
+						categpryRestaurant.setCategory(category);
+						categpryRestaurant.setRestaurant(restaurant);
+						categoryRestaurantRepository.save(categpryRestaurant);
 					}
 				}
 			}
-		}
+		}		
 	}
-}	
+}

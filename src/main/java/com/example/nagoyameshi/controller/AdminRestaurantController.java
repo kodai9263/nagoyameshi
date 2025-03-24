@@ -138,7 +138,7 @@ public class AdminRestaurantController {
 		Restaurant restaurant = optionalRestaurant.get();
 		List<Integer> categoryIds = categoryRestaurantService.findCategoryIdsByRestaurantOrderByIdAsc(restaurant);
 		RestaurantEditForm restaurantEditForm = new RestaurantEditForm(restaurant.getName(), null, restaurant.getDescription(), restaurant.getLowestPrice(), restaurant.getHighestPrice(),
-																   restaurant.getPostalCode(), restaurant.getAddress(), restaurant.getOpeningTime(), restaurant.getClosingTime(), restaurant.getSeatingCapacity(),categoryIds);
+																   restaurant.getPostalCode(), restaurant.getAddress(), restaurant.getOpeningTime(), restaurant.getClosingTime(), restaurant.getSeatingCapacity(), categoryIds);
 		
 		List<Category> categories = categoryService.findAllCategories();
 		model.addAttribute("restaurant", restaurant);
