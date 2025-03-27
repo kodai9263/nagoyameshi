@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.nagoyameshi.entity.Category;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer>{
-	Page<Category> findByNameLike(String nameKeyword, Pageable pageable);
+	public Page<Category> findByNameLike(String nameKeyword, Pageable pageable);
 	public Category findFirstByOrderByIdDesc();
+	public Category findFirstByName(String name);
 }

@@ -36,6 +36,11 @@ public class RestaurantService {
 	public Page<Restaurant> findAllRestaurants(Pageable pageable) {
 		return restaurantRepository.findAll(pageable);
 	}
+	
+	// すべての店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する。
+	public Page<Restaurant> findAllRestaurantsByOrderByCreatedAtDesc(Pageable pageable) {
+		return restaurantRepository.findAllByOrderByCreatedAtDesc(pageable);
+	}
 
 	// 指定されたキーワードを店舗名に含む店舗を、ページングされた状態で取得する。
 	public Page<Restaurant> findRestaurantsByNameLike(String nameKeyword, Pageable pageable) {

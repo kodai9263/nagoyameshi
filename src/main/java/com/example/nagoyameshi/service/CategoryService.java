@@ -30,6 +30,11 @@ public class CategoryService {
 		return categoryRepository.findAll(pageable);
 	}
 	
+	// 指定したカテゴリ名を持つ最初のカテゴリを取得する。
+	public Category findFirstCtegoryByName(String name) {
+		return categoryRepository.findFirstByName(name);
+	}
+	
 	// 指定されたキーワードをカテゴリ名に含むカテゴリを、ページングされた状態で取得する。
 	public Page<Category> findCategoriesByNameLike(String nameKeyword, Pageable pageable) {
 		return categoryRepository.findByNameLike("%" + nameKeyword + "%", pageable);
