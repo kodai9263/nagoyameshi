@@ -86,6 +86,22 @@ public class AdminTermControllerTest {
 		Term termAfter = termService.findFirstTermByOrderByIdDesc();
 		assertThat(termAfter.getContent()).isEqualTo(termBefore.getContent());
 	}
+
+	/*TODO  カリキュラムの模範解答だと変数を準備してから行なってました。　自分の場合はbeforとafterで分けたのですが、どちらのが良いでしょうか？
+	 * @Test
+		@Transactional
+		public void 未ログインの場合は利用規約を更新せずにログインページにリダイレクトする() throws Exception {
+    		Term term = termService.findFirstTermByOrderByIdDesc();
+    		String originalContent = term.getContent();
+
+    		mockMvc.perform(post("/admin/terms/update").with(csrf()).param("content", "テスト内容"))
+           			.andExpect(status().is3xxRedirection())
+           			.andExpect(redirectedUrl("http://localhost/login"));
+
+    		term = termService.findFirstTermByOrderByIdDesc();
+    		assertThat(term.getContent()).isEqualTo(originalContent);
+			}
+	 */
 	
 	@Test
 	@WithUserDetails("taro.samurai@example.com")
