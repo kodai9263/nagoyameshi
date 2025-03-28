@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.nagoyameshi.entity.Role;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SignupForm;
+import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.RoleRepository;
 import com.example.nagoyameshi.repository.UserRepository;
 
@@ -56,6 +57,35 @@ public class UserService {
 		return userRepository.save(user);
 	}
 	
+	/**
+	 * 
+	 * @param user 更新するユーザーエンティティ
+	 * @param userEditForm　会員情報編集フォームのデータ
+	 * @return　更新されたユーザーのエンティティ
+	 */
+	@Transactional
+	public User updateUser(User user, UserEditForm userEditForm) {
+		
+		user.setName(userEditForm.getName());
+		user.setFurigana(userEditForm.getFurigana());
+		user.setPostalCode(userEditForm.getPostalCode());
+		user.setAddress(userEditForm.getAddress());
+		user.setPhoneNumber(userEditForm.getPhoneNumber());
+		if (!userEditForm.getBirthday().isEmpty()) {
+			user.setBirthday(LocalDate.parse(userEditForm.getBirthday(), DateTimeFormatter.ofPattern("yyyyMMdd")));
+		} else {
+				user.setBirthday(null);
+		}
+		if (!userEditForm.getOccupation().isEmpty()) {
+			user.setOccupation(userEditForm.getOccupation());
+		} else {
+			user.setOccupation(null);
+		}
+		user.setEmail(userEditForm.getEmail());
+		
+		return userRepository.save(user);
+	}
+	
 	// メールアドレスが登録済みか確認
 	public boolean isEmailRegistered(String email) {
 		User user = userRepository.findByEmail(email);
@@ -65,6 +95,11 @@ public class UserService {
 	// パスワードと確認用パスワードが一致するか確認
 	public boolean isSamePassword(String password, String passwordConfirmation) {
 		return password.equals(passwordConfirmation);
+	}
+	
+	// メールアドレスが変更されたかどうかをチェックする。
+	public boolean isEmailChanged(UserEditForm userEditForm, User user) {
+		return !userEditForm.getEmail().equals(user.getEmail());
 	}
 	
 	// ユーザーを有効にする
@@ -87,5 +122,10 @@ public class UserService {
 	// 指定したIDを持つユーザーを取得する
 	public Optional<User> findUserId(Integer id) {
 		return userRepository.findById(id);
+	}
+	
+	// 指定したメールアドレスを持つユーザーを取得する。
+	public User findUserByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 }
