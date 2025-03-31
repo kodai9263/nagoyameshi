@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
@@ -22,6 +23,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.service.CategoryRestaurantService;
+import com.example.nagoyameshi.service.RegularHolidayRestaurantService;
 import com.example.nagoyameshi.service.RestaurantService;
 
 @SpringBootTest
@@ -33,6 +36,12 @@ public class AdminRestaurantControllerTest {
 	
 	@Autowired
 	private RestaurantService restaurantService;
+	
+	@Autowired
+	private CategoryRestaurantService categoryRestaurantService;
+	
+	@Autowired
+	private RegularHolidayRestaurantService regularHolidayRestaurantService;
 	
 	@Test
 	public void 未ログインの場合は管理者用の店舗一覧ページからログインページにリダイレクトする() throws Exception {
@@ -366,7 +375,9 @@ public class AdminRestaurantControllerTest {
 				.param("address", "テスト住所")
 				.param("openingTime", "10:00")
 				.param("closingTime", "20:00")
-				.param("seatingCapacity", "100"))
+				.param("seatingCapacity", "100")
+				.param("categoryIds", "1")
+				.param("regularHolidayIds", "1"))
 			.andExpect(status().is3xxRedirection())
 			.andExpect(redirectedUrl("/admin/restaurants"));
 		
@@ -382,6 +393,13 @@ public class AdminRestaurantControllerTest {
 		assertThat(restaurant.getOpeningTime()).isEqualTo("10:00");
 		assertThat(restaurant.getClosingTime()).isEqualTo("20:00");
 		assertThat(restaurant.getSeatingCapacity()).isEqualTo(100);
+		
+		// TODO テストを行ったところ、おそらくカテゴリと休日日を設定したからか、この振る舞いでエラーが起こっていたみたいなので、テストを書き直しました。
+		List<Integer> categoryIds = categoryRestaurantService.findCategoryIdsByRestaurantOrderByIdAsc(restaurant);
+		assertThat(categoryIds).contains(1); // 複数の場合: assertThat(categoryIds).containsExactly(1, 2);
+		
+		List<Integer> regularHolidayIds = regularHolidayRestaurantService.findRegularHolidayIdsByRestaurant(restaurant);
+		assertThat(regularHolidayIds).contains(1);
  	}
 	
 	@Test
