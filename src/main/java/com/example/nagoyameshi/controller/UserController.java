@@ -50,12 +50,13 @@ public class UserController {
 	public String edit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
 		User user = userDetailsImpl.getUser();
 		
+		// TODO birthdayのゲット方法　変数定義してif文を取得する前に定義する必要がないので、まとまるかなと思いこっちにしてみました。
 		UserEditForm userEditForm = new UserEditForm(user.getName(), 
 													 user.getFurigana(),
 													 user.getPostalCode(),
 													 user.getAddress(),
-													 user.getPhoneNumber(),
-													 user.getBirthday() != null ? user.getBirthday().format(DateTimeFormatter.ofPattern("yyyyMMdd")) : null,
+													 user.getPhoneNumber(),		// もしnullでなければ、フォーマットして誕生日を取得する。nullの場合nullを返す。
+													 user.getBirthday() 		!= null ? user.getBirthday().format(DateTimeFormatter.ofPattern("yyyyMMdd")) : null,
 													 user.getOccupation(),
 													 user.getEmail());
 		

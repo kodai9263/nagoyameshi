@@ -199,7 +199,7 @@ public class AdminRestaurantController {
 			model.addAttribute("restaurantEditForm", restaurantEditForm);
 			model.addAttribute("categories", categories);
 			model.addAttribute("regularHolidays", regularHolidays);
-			return  "admin/restaurants/register";
+			return  "admin/restaurants/edit";
 		}
 		
 		restaurantService.updateRestaurant(restaurantEditForm, restaurant);

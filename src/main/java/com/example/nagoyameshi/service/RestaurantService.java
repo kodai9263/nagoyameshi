@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.Restaurant;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
@@ -37,14 +38,49 @@ public class RestaurantService {
 		return restaurantRepository.findAll(pageable);
 	}
 	
-	// すべての店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する。
+	// すべての店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する。①
 	public Page<Restaurant> findAllRestaurantsByOrderByCreatedAtDesc(Pageable pageable) {
 		return restaurantRepository.findAllByOrderByCreatedAtDesc(pageable);
+	}
+	
+	// すべての店舗を最低価格が安い順に並べ替え、ページングされた状態で取得する ②
+	public Page<Restaurant> findAllRestaurantsByOrderByLowestPriceAsc(Pageable pageable) {
+		return restaurantRepository.findAllByOrderByLowestPriceAsc(pageable);
 	}
 
 	// 指定されたキーワードを店舗名に含む店舗を、ページングされた状態で取得する。
 	public Page<Restaurant> findRestaurantsByNameLike(String nameKeyword, Pageable pageable) {
 		return restaurantRepository.findByNameLike("%" + nameKeyword + "%", pageable);
+	}
+	
+	// 指定されたキーワードを店舗名または住所またはカテゴリ名に含む店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する ③
+	public Page<Restaurant> findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByCreatedAtDesc(String nameKeyword, String addressKeyword, Category category, Pageable pageable) {
+		return restaurantRepository.findByNameLikeOrAddressLikeOrCategoryNameLikeOrderByCreatedAtDesc("%" + nameKeyword + "%", "%" + addressKeyword + "%", category, pageable);
+	}
+	
+	// 指定されたキーワードを店舗名または住所またはカテゴリ名に含む店舗を最低価格が安い順に並べ替え、ページングされた状態で取得する。④
+	public Page<Restaurant> findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByLowestPriceAsc(String nameKeyword, String addressKeyword, Category category, Pageable pageable) {
+		return restaurantRepository.findByNameLikeOrAddressLikeOrCategoryNameLikeOrderByLowestPriceAsc("%" + nameKeyword + "%", "%" + addressKeyword + "%", category, pageable);
+	}
+	
+	// 指定されたidのカテゴリが設定された店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する。⑤
+	public Page<Restaurant> findRestaurantsByCategoryIdOrderByCreatedAtDesc(Category category, Pageable pageable) {
+		return restaurantRepository.findByCategoryIdOrderByCreatedAtDesc(category, pageable);
+	}
+	
+	// 指定されたidのカテゴリが設定された店舗を最低価格が安い順に並べ替え、ページングされた状態で取得する。 ⑥
+	public Page<Restaurant> findRestaurantsByCategoryIdOrderByLowestPriceAsc(Category category, Pageable pageable) {
+		return restaurantRepository.findByCategoryIdOrderByLowestPriceAsc(category, pageable);
+	}
+	
+	// 指定された最低価格以下の店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する。 ⑦
+	public Page<Restaurant> findRestaurantsByLowestPriceLessThanEqualOrderByCreatedAtDesc(Integer lowestPrice, Pageable pageable) {
+		return restaurantRepository.findByLowestPriceLessThanEqualOrderByCreatedAtDesc(lowestPrice, pageable);
+	}
+	
+	// 指定された最低価格以下の店舗を最低価格が安い順に並べ替え、ページングされた状態で取得する。 ⑧
+	public Page<Restaurant> findRestaurantsByLowestPriceLessThanEqualOrderByLowestPriceAsc(Integer lowestPrice, Pageable pageable) {
+		return restaurantRepository.findByLowestPriceLessThanEqualOrderByLowestPriceAsc(lowestPrice, pageable);
 	}
 	
 	// 指定したidを持つ店舗を取得する。
