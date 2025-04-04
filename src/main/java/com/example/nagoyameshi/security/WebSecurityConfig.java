@@ -20,6 +20,8 @@ public class WebSecurityConfig {
 				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**").permitAll()	// 全てのユーザーにアクセスを許可するURL
 				.requestMatchers("/admin/**").hasRole("ADMIN") // 管理者がアクセスできるURL
 				.requestMatchers("/restaurants/**").hasAnyRole("ANONYMOUS", "FREE_MEMBER", "PAID_MEMBER") 
+				.requestMatchers("/subscription/register", "/subscription/create").hasRole("FREE_MEMBER")
+				.requestMatchers("/subscription/edit", "/subscription/update", "/subscription/cancel", "/subscription/delete").hasRole("PAID_MEMBER")
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) ->form

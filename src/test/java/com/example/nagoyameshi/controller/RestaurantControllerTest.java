@@ -39,4 +39,26 @@ public class RestaurantControllerTest {
 		mockMvc.perform(get("/restaurants"))
 			   .andExpect(status().isForbidden());
 	}
+	
+	@Test
+	public void 未ログインの場合は会員用の店舗詳細ページが正しく表示される() throws Exception {
+		mockMvc.perform(get("/restaurants/1"))
+			   .andExpect(status().isOk())
+			   .andExpect(view().name("restaurants/show"));
+	}
+	
+	@Test
+	@WithUserDetails("taro.samurai@example.com")
+	public void 一般ユーザーとしてログイン済みの場合は会員用の店舗詳細ページが正しく表示される() throws Exception {
+		mockMvc.perform(get("/restaurants/1"))
+			   .andExpect(status().isOk())
+			   .andExpect(view().name("restaurants/show"));
+	}
+	
+	@Test
+	@WithUserDetails("hanako.samurai@example.com")
+	public void 管理者としてログイン済みの場合は会員用の店舗詳細ページが表示されずに403エラーが発生する() throws Exception {
+		mockMvc.perform(get("/restaurants/1"))
+			   .andExpect(status().isForbidden());
+	}
 }
