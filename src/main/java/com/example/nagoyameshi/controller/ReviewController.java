@@ -67,5 +67,8 @@ public class ReviewController {
 		
 		return "reviews/index";
 	}
+	
+	@GetMapping("/register")
+	public String refister()
 
 }
