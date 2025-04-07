@@ -3,9 +3,11 @@ package com.example.nagoyameshi.controller;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +31,7 @@ import com.example.nagoyameshi.service.RestaurantService;
 import com.example.nagoyameshi.service.ReviewService;
 
 @Controller
+@PreAuthorize("isAuthenticated()")
 @RequestMapping("/restaurants/{restaurantId}/reviews")
 public class ReviewController {
 	private final ReviewService reviewService;
@@ -62,9 +65,13 @@ public class ReviewController {
 		
 		// 
 		Page<Review> reviewPage = reviewService.findReviewsByRestaurantOrderByCreatedAtDesc(restaurant, pageable);
-		if (!userRoleName.equals("ROLE_PAID_MEMBER")) {
+		if (userRoleName.equals("ROLE_PAID_MEMBER")) {
+			reviewPage = reviewService.findReviewsByRestaurantOrderByCreatedAtDesc(restaurant, pageable);
+		} else {
 			//TODO 有料会員でなければ最初の三件のみ取得したい
+			reviewPage = reviewService.findReviewsByRestaurantOrderByCreatedAtDesc(restaurant, PageRequest.of(0, 3));
 		}
+		
 		Boolean hasUserAlreadyReviewed = reviewService.hasUserAlreadyReviewed(restaurant, user);
 		
 		model.addAttribute("restaurant", restaurant);

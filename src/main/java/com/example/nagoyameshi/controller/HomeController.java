@@ -25,7 +25,7 @@ public class HomeController {
 	
 	@GetMapping("/")
 	public String index(Model model) {
-		Page<Restaurant> highlyRatedRestaurants = restaurantService.findAllRestaurantsByOrderByCreatedAtDesc(PageRequest.of(0, 6));
+		Page<Restaurant> highlyRatedRestaurants = restaurantService.findAllRestaurantsByOrderByAverageScoreDesc(PageRequest.of(0, 6));
 		Page<Restaurant> newRestaurants = restaurantService.findAllRestaurantsByOrderByCreatedAtDesc(PageRequest.of(0, 6));
 		Category washoku = categoryService.findFirstCtegoryByName("和食");
 		Category udon = categoryService.findFirstCtegoryByName("うどん");
