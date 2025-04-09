@@ -17,11 +17,9 @@ import com.example.nagoyameshi.repository.ReviewRepository;
 @Service
 public class ReviewService {
 	private final ReviewRepository reviewRepository;
-	private final RestaurantService restaurantService;
 	
-	public ReviewService(ReviewRepository reviewRepository, RestaurantService restaurantService) {
+	public ReviewService(ReviewRepository reviewRepository) {
 		this.reviewRepository = reviewRepository;
-		this.restaurantService = restaurantService;
 	}
 	
 	// 指定したidを持つレビューを取得する。
@@ -51,14 +49,7 @@ public class ReviewService {
 		
 		review.setContent(reviewRegisterForm.getContent());
 		review.setScore(reviewRegisterForm.getScore());
-		
-		Optional<Restaurant> optionalRestaurant = restaurantService.findRestaurantById(restaurant.getId());
-		if (optionalRestaurant.isPresent()) {
-			review.setRestaurant(optionalRestaurant.get());
-		} else {
-			throw new IllegalArgumentException("Invalid restaurant ID:" + restaurant.getId());
-		}
-		
+		review.setRestaurant(restaurant);
 		review.setUser(user);
 		
 		reviewRepository.save(review);

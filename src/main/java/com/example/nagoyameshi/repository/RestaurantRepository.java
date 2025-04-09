@@ -75,7 +75,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 	
 	// TODO クエリメソッド
 	// すべての店舗を平均評価が高い順に並べ替え、ページングされた状態で取得する。
-	@Query("SELECT DISTINCT r FROM Restaurant r " +
+	@Query("SELECT r FROM Restaurant r " +
 		   "LEFT JOIN r.reviews re " +
 		   "GROUP BY r.id " +
 		   "ORDER BY AVG(re.score) DESC")
