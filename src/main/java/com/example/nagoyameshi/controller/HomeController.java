@@ -27,12 +27,12 @@ public class HomeController {
 	public String index(Model model) {
 		Page<Restaurant> highlyRatedRestaurants = restaurantService.findAllRestaurantsByOrderByAverageScoreDesc(PageRequest.of(0, 6));
 		Page<Restaurant> newRestaurants = restaurantService.findAllRestaurantsByOrderByCreatedAtDesc(PageRequest.of(0, 6));
-		Category washoku = categoryService.findFirstCtegoryByName("和食");
-		Category udon = categoryService.findFirstCtegoryByName("うどん");
-		Category don = categoryService.findFirstCtegoryByName("丼物");
-		Category ramen = categoryService.findFirstCtegoryByName("ラーメン");
-		Category oden = categoryService.findFirstCtegoryByName("おでん");
-		Category fried = categoryService.findFirstCtegoryByName("揚げ物");
+		Category washoku = categoryService.findFirstCategoryByName("和食");
+		Category udon = categoryService.findFirstCategoryByName("うどん");
+		Category don = categoryService.findFirstCategoryByName("丼物");
+		Category ramen = categoryService.findFirstCategoryByName("ラーメン");
+		Category oden = categoryService.findFirstCategoryByName("おでん");
+		Category fried = categoryService.findFirstCategoryByName("揚げ物");
 		List<Category> categories = categoryService.findAllCategories();
 		
 		model.addAttribute("highlyRatedRestaurants",highlyRatedRestaurants);

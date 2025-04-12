@@ -42,40 +42,45 @@ public class RestaurantController {
 		Page<Restaurant> restaurantPage = null;
 		List<Category> categories = categoryService.findAllCategories();
 		
-		/** TODO Repositoryで引数をcategoryで指定したため、引数の指定がうまくいきませんでした。
-		 * 工夫としては、一旦categoryを定義するべきだと思い、restaurantServiceのメソッドを呼び出す前にcategoryを定義したらうまく動きました。
-		 * 模範解答とは違った内容でしたが、この書き方でも大丈夫でしょうか？
-		 */
-		
+		// TODO カテゴリーを毎回書くのが冗長だったので、先に定義してみました。
+		Category category = null;
 		if (keyword != null && !keyword.isEmpty()) {
-			if ( order != null && order.equals("lowestPriceAsc")) {
-				Category category = categoryService.findFirstCtegoryByName(keyword);
-				restaurantPage = restaurantService.findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByLowestPriceAsc(keyword, keyword, category, pageable);
-			} else if ( order != null && order.equals("ratingDesc")) {
-				Category category = categoryService.findFirstCtegoryByName(keyword);
-				restaurantPage = restaurantService.findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByAverageScoreDesc(keyword, keyword, category, pageable);
-			} else {
-				Category category = categoryService.findFirstCtegoryByName(keyword);
-				restaurantPage = restaurantService.findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByCreatedAtDesc(keyword, keyword, category, pageable);
-			}
+			category = categoryService.findFirstCategoryByName(keyword);
 		} else if (categoryId != null) {
 			Optional<Category> optionalCategory = categoryService.findCategoryById(categoryId);
 			if (optionalCategory.isPresent()) {
-				Category category = optionalCategory.get();
-				if ( order != null && order.equals("lowestPriceAsc")) {
-					restaurantPage = restaurantService.findRestaurantsByCategoryIdOrderByLowestPriceAsc(category, pageable);
-				} else if ( order != null && order.equals("ratingDesc")) {
-					restaurantPage = restaurantService.findRestaurantsByCategoryIdOrderByAverageScoreDesc(category, pageable);
-				} else {
+				category = optionalCategory.get();
+			}
+		}
+		
+		if (keyword != null && !keyword.isEmpty()) {
+			if ( order != null && order.equals("lowestPriceAsc")) {
+				restaurantPage = restaurantService.findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByLowestPriceAsc(keyword, keyword, category, pageable);
+			} else if ( order != null && order.equals("ratingDesc")) {
+				restaurantPage = restaurantService.findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByAverageScoreDesc(keyword, keyword, category, pageable);
+			} else if ( order != null && order.equals("popularDesc")) {
+				restaurantPage = restaurantService.findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByReservationCountDesc(keyword, keyword, category, pageable);
+			} else {	
+				restaurantPage = restaurantService.findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByCreatedAtDesc(keyword, keyword, category, pageable);
+			}
+		} else if (categoryId != null) {
+			if ( order != null && order.equals("lowestPriceAsc")) {
+				restaurantPage = restaurantService.findRestaurantsByCategoryIdOrderByLowestPriceAsc(category, pageable);
+			} else if ( order != null && order.equals("ratingDesc")) {
+				restaurantPage = restaurantService.findRestaurantsByCategoryIdOrderByAverageScoreDesc(category, pageable);
+			} else if ( order != null && order.equals("popularDesc")) {
+				restaurantPage = restaurantService.findRestaurantsByCategoryIdOrderByReservationCountDesc(category, pageable);
+			} else {
 					restaurantPage = restaurantService.findRestaurantsByCategoryIdOrderByCreatedAtDesc(category, pageable);
-				}
 			}
 		} else if (price != null) {
 			if ( order != null && order.equals("lowestPriceAsc")) {
 				restaurantPage = restaurantService.findRestaurantsByLowestPriceLessThanEqualOrderByLowestPriceAsc(price, pageable);
 			} else if ( order != null && order.equals("ratingDesc")) {
 				restaurantPage = restaurantService.findRestaurantsByLowestPriceLessThanEqualOrderByAverageScoreDesc(price, pageable);
-			} else {
+			} else if ( order != null && order.equals("popularDesc")) {
+				restaurantPage = restaurantService.findRestaurantsByLowestPriceLessThanEqualOrderByReservationCountDesc(price, pageable);
+			} else {	
 				restaurantPage = restaurantService.findRestaurantsByLowestPriceLessThanEqualOrderByCreatedAtDesc(price, pageable);
 			}
 		} else {
@@ -83,7 +88,9 @@ public class RestaurantController {
 				restaurantPage = restaurantService.findAllRestaurantsByOrderByLowestPriceAsc(pageable);
 			} else if ( order != null && order.equals("ratingDesc")) {
 				restaurantPage = restaurantService.findAllRestaurantsByOrderByAverageScoreDesc(pageable);
-			} else {
+			} else if ( order != null && order.equals("popularDesc")) {
+				restaurantPage = restaurantService.findAllRestaurantsByOrderByReservationCountDesc(pageable);
+			} else {	
 				restaurantPage = restaurantService.findAllRestaurantsByOrderByCreatedAtDesc(pageable);
 			}
 		}

@@ -273,81 +273,81 @@ public class ReviewControllerTest {
 	}
 	
 	// レビュー削除機能テスト
-		@Test
-		@Transactional
-		public void 未ログインの場合はレビューを削除せずにログインページにリダイレクトする() throws Exception {
+	@Test
+	@Transactional
+	public void 未ログインの場合はレビューを削除せずにログインページにリダイレクトする() throws Exception {
 			
-			long countBefore = reviewService.countReviews();
+		long countBefore = reviewService.countReviews();
 			
-			mockMvc.perform(post("/restaurants/2/reviews/1/delete")
-				   .with(csrf()))
-				   .andExpect(status().is3xxRedirection())
-				   .andExpect(redirectedUrl("http://localhost/login"));
+		mockMvc.perform(post("/restaurants/2/reviews/1/delete")
+			   .with(csrf()))
+			   .andExpect(status().is3xxRedirection())
+			   .andExpect(redirectedUrl("http://localhost/login"));
 			
-			long countAfter = reviewService.countReviews();
-			assertThat(countAfter).isEqualTo(countBefore);
-		}
+		long countAfter = reviewService.countReviews();
+		assertThat(countAfter).isEqualTo(countBefore);
+	}
 		
-		@Test
-		@WithUserDetails("taro.samurai@example.com")
-		@Transactional
-		public void 無料会員としてログイン済みの場合はレビューを削除せずに有料プラン登録ページにリダイレクトする() throws Exception {
-			
-			long countBefore = reviewService.countReviews();
-			
-			mockMvc.perform(post("/restaurants/2/reviews/1/delete")
-					   .with(csrf()))
-					   .andExpect(status().is3xxRedirection())
-					   .andExpect(redirectedUrl("/subscription/register"));
-			
-			long countAfter = reviewService.countReviews();
-			assertThat(countAfter).isEqualTo(countBefore);
-		}
+	@Test
+	@WithUserDetails("taro.samurai@example.com")
+	@Transactional
+	public void 無料会員としてログイン済みの場合はレビューを削除せずに有料プラン登録ページにリダイレクトする() throws Exception {
+	
+		long countBefore = reviewService.countReviews();
 		
-		@Test
-		@WithUserDetails("jiro.samurai@example.com")
-		@Transactional
-		public void 有料会員としてログイン済みの場合は自身のレビュー削除後に店舗詳細ページにリダイレクトする() throws Exception {
+		mockMvc.perform(post("/restaurants/2/reviews/1/delete")
+			   .with(csrf()))
+			   .andExpect(status().is3xxRedirection())
+			   .andExpect(redirectedUrl("/subscription/register"));
 			
-			long countBefore = reviewService.countReviews();
-			
-			mockMvc.perform(post("/restaurants/2/reviews/1/delete")
-					   .with(csrf()))
-					   .andExpect(status().is3xxRedirection())
-					   .andExpect(redirectedUrl("/restaurants/2"));
-			
-			long countAfter = reviewService.countReviews();
-			assertThat(countAfter).isEqualTo(countBefore - 1);
-		}
+		long countAfter = reviewService.countReviews();
+		assertThat(countAfter).isEqualTo(countBefore);
+	}
+	
+	@Test
+	@WithUserDetails("jiro.samurai@example.com")
+	@Transactional
+	public void 有料会員としてログイン済みの場合は自身のレビュー削除後に店舗詳細ページにリダイレクトする() throws Exception {
 		
-		@Test
-		@WithUserDetails("jiro.samurai@example.com")
-		@Transactional
-		public void 有料会員としてログイン済みの場合は他人のレビューを削除せずに店舗詳細ページにリダイレクトする() throws Exception {
-			
-			long countBefore = reviewService.countReviews();
-			
-			mockMvc.perform(post("/restaurants/2/reviews/2/delete")
-					   .with(csrf()))
-					   .andExpect(status().is3xxRedirection())
-					   .andExpect(redirectedUrl("/restaurants/2"));
-			
-			long countAfter = reviewService.countReviews();
-			assertThat(countAfter).isEqualTo(countBefore);
-		}
+		long countBefore = reviewService.countReviews();
 		
-		@Test
-		@WithUserDetails("hanako.samurai@example.com")
-		@Transactional
-		public void 管理者としてログイン済みの場合はレビューを削除せずに403エラーが発生する() throws Exception {
+		mockMvc.perform(post("/restaurants/2/reviews/1/delete")
+			   .with(csrf()))
+			   .andExpect(status().is3xxRedirection())
+			   .andExpect(redirectedUrl("/restaurants/2"));
+		
+		long countAfter = reviewService.countReviews();
+		assertThat(countAfter).isEqualTo(countBefore - 1);
+	}
+	
+	@Test
+	@WithUserDetails("jiro.samurai@example.com")
+	@Transactional
+	public void 有料会員としてログイン済みの場合は他人のレビューを削除せずに店舗詳細ページにリダイレクトする() throws Exception {
+	
+		long countBefore = reviewService.countReviews();
+		
+		mockMvc.perform(post("/restaurants/2/reviews/2/delete")
+			   .with(csrf()))
+			   .andExpect(status().is3xxRedirection())
+			   .andExpect(redirectedUrl("/restaurants/2"));
+		
+		long countAfter = reviewService.countReviews();
+		assertThat(countAfter).isEqualTo(countBefore);
+	}
+	
+	@Test
+	@WithUserDetails("hanako.samurai@example.com")
+	@Transactional
+	public void 管理者としてログイン済みの場合はレビューを削除せずに403エラーが発生する() throws Exception {
+		
+		long countBefore = reviewService.countReviews();
+		
+		mockMvc.perform(post("/restaurants/2/reviews/1/delete")
+			   .with(csrf()))
+			   .andExpect(status().isForbidden());
 			
-			long countBefore = reviewService.countReviews();
-			
-			mockMvc.perform(post("/restaurants/2/reviews/1/delete")
-					   .with(csrf()))
-				   	   .andExpect(status().isForbidden());
-			
-			long countAfter = reviewService.countReviews();
-			assertThat(countAfter).isEqualTo(countBefore);
-		}
+		long countAfter = reviewService.countReviews();
+		assertThat(countAfter).isEqualTo(countBefore);
+	}
 }

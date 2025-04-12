@@ -31,7 +31,7 @@ public class CategoryService {
 	}
 	
 	// 指定したカテゴリ名を持つ最初のカテゴリを取得する。
-	public Category findFirstCtegoryByName(String name) {
+	public Category findFirstCategoryByName(String name) {
 		return categoryRepository.findFirstByName(name);
 	}
 	

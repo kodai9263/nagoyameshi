@@ -52,6 +52,11 @@ public class RestaurantService {
 	public Page<Restaurant> findAllRestaurantsByOrderByAverageScoreDesc(Pageable pageable) {
 		return restaurantRepository.findAllByOrderByAverageScoreDesc(pageable);
 	}
+	
+	// すべての店舗を予約数が多い順に並べ替え、ページングされた状態で取得する。
+	public Page<Restaurant> findAllRestaurantsByOrderByReservationCountDesc(Pageable pageable) {
+		return restaurantRepository.findAllByOrderByReservationCountDesc(pageable);
+	}
 
 	// 指定されたキーワードを店舗名に含む店舗を、ページングされた状態で取得する。
 	public Page<Restaurant> findRestaurantsByNameLike(String nameKeyword, Pageable pageable) {
@@ -73,6 +78,11 @@ public class RestaurantService {
 		return restaurantRepository.findByNameLikeOrAddressLikeOrCategoryNameLikeOrderByAverageScoreDesc("%" + nameKeyword + "%", "%" + addressKeyword + "%", category, pageable);
 	}
 	
+	// 指定されたキーワードを店舗名または住所またはカテゴリ名に含む店舗を予約数が多い順に並べ替え、ページングされた状態で取得する。
+	public Page<Restaurant> findRestaurantsByNameLikeOrAddressLikeOrCategoryNameLikeOrderByReservationCountDesc(String nameKeyword, String addressKeyword, Category category, Pageable pageable) {
+		return restaurantRepository.findByNameLikeOrAddressLikeOrCategoryNameLikeOrderByReservationCountDesc("%" + nameKeyword + "%", "%" + addressKeyword + "%", category, pageable);
+	}
+	
 	// 指定されたidのカテゴリが設定された店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する。
 	public Page<Restaurant> findRestaurantsByCategoryIdOrderByCreatedAtDesc(Category category, Pageable pageable) {
 		return restaurantRepository.findByCategoryIdOrderByCreatedAtDesc(category, pageable);
@@ -86,6 +96,11 @@ public class RestaurantService {
 	// 指定されたidのカテゴリが設定された店舗を平均評価が高い順に並べ替え、ページングされた状態で取得する。
 	public Page<Restaurant> findRestaurantsByCategoryIdOrderByAverageScoreDesc(Category category, Pageable pageable) {
 		return restaurantRepository.findByCategoryIdOrderByAverageScoreDesc(category, pageable);
+	}
+	
+	// 指定されたidのカテゴリが設定された店舗を予約数が多い順に並べ替え、ページングされた状態で取得する。
+	public Page<Restaurant> findRestaurantsByCategoryIdOrderByReservationCountDesc(Category category, Pageable pageable) {
+		return restaurantRepository.findByCategoryIdOrderByReservationCountDesc(category, pageable);
 	}
 	
 	// 指定された最低価格以下の店舗を作成日時が新しい順に並べ替え、ページングされた状態で取得する。
@@ -103,6 +118,11 @@ public class RestaurantService {
 		return restaurantRepository.findByLowestPriceLessThanEqualOrderByAverageScoreDesc(lowestPrice, pageable);
 	}
 	
+	// 指定された最低価格以下の店舗を予約数が多い順に並べ替え、ページングされた状態で取得する。
+	public Page<Restaurant> findRestaurantsByLowestPriceLessThanEqualOrderByReservationCountDesc(Integer lowestPrice, Pageable pageable) {
+		return restaurantRepository.findByLowestPriceLessThanEqualOrderByReservationCountDesc(lowestPrice, pageable);
+	}
+	
 	// 指定したidを持つ店舗を取得する。
 	public Optional<Restaurant> findRestaurantById(Integer id) {
 		return restaurantRepository.findById(id);
@@ -116,6 +136,11 @@ public class RestaurantService {
 	// idが最も大きい店舗を取得する。
 	public Restaurant findFirstRestaurantByIdDesc() {
 		return restaurantRepository.findFirstByOrderByIdDesc();
+	}
+	
+	// 指定された店舗の定休日のday_indexフィールドの値をリストで取得する。
+	public List<Integer> findDayIndexesByRestaurantId(Integer restaurantId) {
+		return restaurantRepository.findDayIndexesByRestaurantId(restaurantId);
 	}
 	
 	// フォームから送信された店舗情報をデータベースに登録する。

@@ -22,7 +22,7 @@ public class WebSecurityConfig {
 				.requestMatchers("/restaurants/**").hasAnyRole("ANONYMOUS", "FREE_MEMBER", "PAID_MEMBER") 
 				.requestMatchers("/subscription/register", "/subscription/create").hasRole("FREE_MEMBER")
 				.requestMatchers("/subscription/edit", "/subscription/update", "/subscription/cancel", "/subscription/delete").hasRole("PAID_MEMBER")
-				.requestMatchers("/restaurants/{restaurantId}/reviews/**").hasAnyRole("FREE_MEMBER", "PAID_MEMBER")
+				.requestMatchers("/restaurants/{restaurantId}/reviews/**", "/reservations/**", "/restaurants/{restaurantId}/reservations/**").hasAnyRole("FREE_MEMBER", "PAID_MEMBER")
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) ->form
