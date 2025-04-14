@@ -62,6 +62,8 @@ public class ReservationService {
 		reservationRepository.delete(reservation);
 	}
 	
+	// TODO 模範回答と比べて違ったが、模範回答のコードの内容が理解できなかった
+	
 	// 予約日時が現在よりも2時間以上後であればtrueを返す。
 	public boolean isAtLeastTwoHoursInFuture(LocalDateTime localDateTime) {
 		
