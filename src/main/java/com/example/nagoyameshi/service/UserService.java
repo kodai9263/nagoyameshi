@@ -163,4 +163,9 @@ public class UserService {
 		// 認証情報を更新する
 		SecurityContextHolder.getContext().setAuthentication(newAuthentication);
 	}
+	
+	// 指定したロール名に紐づくユーザーのレコード数を取得する。
+	public long countUsersByRole_Name(String roleName) {
+		return userRepository.countByRole_Name(roleName);
+	}
 }
