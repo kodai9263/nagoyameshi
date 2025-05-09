@@ -105,7 +105,10 @@ INSERT IGNORE INTO users (id, name, furigana, postal_code, address, phone_number
 (97, '石川 良太', 'イシカワ リョウタ', '7300032', '広島県広島市中区X-XX-XX', '09012345678', '1975-05-01', '小説家', 'ryota.ishikawa@example.com', 'password', 1, false),
 (98, '吉岡 里帆', 'ヨシオカ リホ', '8100042', '福岡県福岡市中央区X-XX-XX', '09012345678', '1976-05-26', 'ジャーナリスト', 'riho.yoshioka@example.com', 'password', 1, false),
 (99, '福田 順二', 'フクダ ジュンジ', '2200042', '神奈川県横浜市西区X-XX-XX', '09012345678', '1976-05-26', '漫画家', 'junji.fukuda@example.com', 'password', 1, false),
-(100, '石田 花音', 'イシダ カノン', '6500044', '兵庫県神戸市中央区X-XX-XX', '09012345678', '1977-06-20', 'アニメーター', 'kanon.ishida@example.com', 'password', 1, false);
+(100, '石田 花音', 'イシダ カノン', '6500044', '兵庫県神戸市中央区X-XX-XX', '09012345678', '1977-06-20', 'アニメーター', 'kanon.ishida@example.com', 'password', 1, false),
+(101, '鈴木 武蔵', 'スズキ ムサシ', '1010022', '東京都千代田区神田練塀町300番地', '09012345678', '1990-01-01', 'エンジニア', 'musashi.suzuki@example.com', '$2a$10$2JNjTwZBwo7fprL2X4sv.OEKqxnVtsVQvuXDkI8xVGix.U3W5B7CO', 1, true),
+(102, '鈴木 貴明', 'スズキ タカアキ', '1010022', '東京都千代田区神田練塀町300番地', '09012345678', '1990-02-02', 'デザイナー', 'takaaki.suzuki@example.com', '$2a$10$2JNjTwZBwo7fprL2X4sv.OEKqxnVtsVQvuXDkI8xVGix.U3W5B7CO', 2, true),
+(103, '鈴木 洋平', 'スズキ ヨウヘイ', '1010022', '東京都千代田区神田練塀町300番地', '09012345678', '1990-03-03', 'マーケティング', 'youhei.suzuki@example.com', '$2a$10$2JNjTwZBwo7fprL2X4sv.OEKqxnVtsVQvuXDkI8xVGix.U3W5B7CO', 3, true);
 
 /* restaurantsテーブル */
 INSERT IGNORE INTO restaurants (id, name, image, description, lowest_price, highest_price, postal_code, address, opening_time, closing_time, seating_capacity) VALUES
